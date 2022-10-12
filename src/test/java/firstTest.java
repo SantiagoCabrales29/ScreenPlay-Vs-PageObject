@@ -2,8 +2,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.Test;
+import utils.Hooks;
 
-public class firstTest {
+public class firstTest extends Hooks {
 
     WebDriver driver = new ChromeDriver();
 

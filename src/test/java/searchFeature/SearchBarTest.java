@@ -1,35 +1,36 @@
 package searchFeature;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.HomePage;
 import pages.SearchResultPage;
+import utils.Hooks;
 
 import java.util.List;
 
-public class SearchBarTest {
+public class SearchBarTest extends Hooks {
 
-    private WebDriver driver = new ChromeDriver();
     private HomePage homePage;
     private SearchResultPage searchResultPage;
+    private WebDriver driver = getDriver();
 
     @Test
     public void searchTest(){
         String searchTerm = "Trump";
-        driver.get("https://www.nytimes.com/");
+        boolean areSearchResultsCorrect = false;
+
         homePage = new HomePage(driver);
         searchResultPage = homePage.getHeader().searchTerm(searchTerm);
         List<String> results = searchResultPage.getResultTitles();
         for (String result: results) {
-            Assert.assertTrue(result.contains(searchTerm));
+            if(result.contains(searchTerm)){
+                areSearchResultsCorrect = true;
+                break;
+            }
         }
-
-
-        //driver.manage().timeouts().implicitlyWait(5000, TimeUnit.SECONDS);
-        //driver.findElement(By.cssSelector("input[title='Buscar']")).sendKeys("Hello");
-        //driver.quit();
+        Assert.assertTrue(searchResultPage.getResultsList().size()>0);
+        Assert.assertTrue(areSearchResultsCorrect);
+        Assert.assertTrue(driver.getCurrentUrl().contains(searchTerm));
     }
 }

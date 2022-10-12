@@ -6,26 +6,22 @@ import org.openqa.selenium.WebDriver;
 public class HeaderComponent {
 
     private WebDriver driver;
+    private SearchComponent searchComponent;
 
     public HeaderComponent(WebDriver driver) {
        this.driver = driver;
+       this.searchComponent = new SearchComponent(driver);
     }
 
     private By title = By.cssSelector("a[aria-label*='New York Times Logo']");
-    private By searchButton = By.cssSelector("button[data-test-id='search-button']");
-    private By searchBar = By.cssSelector("input[data-testid='search-input']");
-    private By goButton = By.cssSelector("button[data-test-id='search-submit']");
 
 
     public void clickLogoButton(){
         driver.findElement(title).click();
     }
 
-    public SearchResultPage searchTerm(String searchTerm){
-        driver.findElement(searchButton).click();
-        driver.findElement(searchBar).sendKeys(searchTerm);
-        driver.findElement(goButton).click();
-        return new SearchResultPage(driver);
-    }
 
+    public SearchComponent getSearchComponent() {
+        return searchComponent;
+    }
 }

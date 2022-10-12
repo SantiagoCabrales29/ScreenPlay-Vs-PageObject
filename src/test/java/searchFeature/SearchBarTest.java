@@ -4,6 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.HomePage;
+import pages.SearchComponent;
 import pages.SearchResultPage;
 import utils.Hooks;
 
@@ -21,7 +22,7 @@ public class SearchBarTest extends Hooks {
         boolean areSearchResultsCorrect = false;
 
         homePage = new HomePage(driver);
-        searchResultPage = homePage.getHeader().searchTerm(searchTerm);
+        searchResultPage = homePage.getHeader().getSearchComponent().searchTerm(searchTerm);
         List<String> results = searchResultPage.getResultTitles();
         for (String result: results) {
             if(result.contains(searchTerm)){
@@ -32,5 +33,29 @@ public class SearchBarTest extends Hooks {
         Assert.assertTrue(searchResultPage.getResultsList().size()>0);
         Assert.assertTrue(areSearchResultsCorrect);
         Assert.assertTrue(driver.getCurrentUrl().contains(searchTerm));
+    }
+
+    @Test
+    public void deleteSearchTermWithClearButton(){
+        String searchTerm = "Trump";
+        homePage = new HomePage(driver);
+        SearchComponent searchComponent = homePage.getHeader().getSearchComponent();
+        searchComponent.clickSearchButton();
+        searchComponent.sendKeysToSearchBar(searchTerm);
+        String searchBarText = searchComponent.getSearchBarText();
+        Assert.assertEquals(searchBarText, searchTerm);
+        Assert.assertNotEquals(searchComponent.getSearchBarText(),"");
+        searchComponent.clearSearchBar();
+        Assert.assertEquals(searchComponent.getSearchBarText(),"");
+    }
+
+    @Test
+    public void searchBarDissapearsWhenSearchButtonIsClicked(){
+        homePage = new HomePage(driver);
+        SearchComponent searchComponent = homePage.getHeader().getSearchComponent();
+        searchComponent.clickSearchButton();
+        Assert.assertTrue(searchComponent.isSearchBarVisible());
+        searchComponent.clickSearchButton();
+        Assert.assertFalse(searchComponent.isSearchBarVisible());
     }
 }

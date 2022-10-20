@@ -16,8 +16,9 @@ public class HeaderComponent {
     private By title = By.cssSelector("a[aria-label*='New York Times Logo']");
 
 
-    public void clickLogoButton(){
+    public HomePage clickLogoButton(){
         driver.findElement(title).click();
+        return new HomePage(driver);
     }
 
 
